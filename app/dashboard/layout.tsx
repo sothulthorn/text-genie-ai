@@ -12,14 +12,7 @@ const DashboardLayout = ({
         <SideNav />
       </div>
 
-      <div className="col-span-3">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          libero magni dicta omnis ad quidem voluptates consequatur doloremque
-          dolorem in. Dolorum placeat, consectetur impedit perferendis vero
-          officia cumque facere. Tempora?
-        </p>
-      </div>
+      <div className="col-span-3">{children}</div>
     </div>
   );
 };
