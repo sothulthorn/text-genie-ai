@@ -8,6 +8,7 @@ import {
   useUser,
 } from '@clerk/nextjs';
 import Link from 'next/link';
+import { ModeToggle } from './mode-toggle';
 
 const TopNav = () => {
   const { isSignedIn, user } = useUser();
@@ -28,6 +29,10 @@ const TopNav = () => {
         <SignedIn>
           <UserButton />
         </SignedIn>
+
+        <div className="ml-10">
+          <ModeToggle />
+        </div>
       </div>
     </nav>
   );
