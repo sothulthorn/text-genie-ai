@@ -1,5 +1,8 @@
 'use server';
 
+import db from '@/utils/db';
+import Query from '@/models/query';
+
 const {
   GoogleGenerativeAI,
   HarmCategory,
@@ -32,4 +35,27 @@ export async function runAi(text: string) {
   const result = await chatSession.sendMessage(text);
 
   return result.response.text();
+}
+
+export async function saveQuery(
+  template: object,
+  email: string,
+  query: string,
+  content: string
+) {
+  try {
+    await db();
+
+    const newQuery = new Query({ template, email, query, content });
+
+    await newQuery.save();
+
+    return {
+      ok: true,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+    };
+  }
 }
