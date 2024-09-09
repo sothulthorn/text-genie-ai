@@ -14,23 +14,7 @@ import { Editor } from '@toast-ui/react-editor';
 import toast from 'react-hot-toast';
 import { saveQuery } from '@/actions/ai';
 import { useUser } from '@clerk/nextjs';
-
-export interface Template {
-  name: string;
-  slug: string;
-  icon: string;
-  desc: string;
-  category: string;
-  aiPrompt: string;
-  form: Form[];
-}
-
-export interface Form {
-  label: string;
-  field: string;
-  name: string;
-  required: boolean;
-}
+import { Template } from '@/utils/types';
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const [query, setQuery] = useState('');

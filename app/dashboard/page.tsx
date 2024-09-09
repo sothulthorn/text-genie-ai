@@ -16,7 +16,7 @@ const Page = () => {
   return (
     <div>
       {/* Search bar */}
-      <div className="p-10 mx-5 mb-5 rounded-lg bg-slate-200 dark:bg-slate-800 flex flex-col justify-center items-center">
+      <div className="p-10 my-5 mx-5 mb-5 rounded-lg bg-slate-200 dark:bg-slate-800 flex flex-col justify-center items-center">
         <h1 className="text-xl">What would you like to create today?</h1>
         <div className="w-full flex justify-center">
           <div className="flex gap-2 items-center p-2 border border-gray-300 dark:border-gray-700 shadow-lg rounded-md bg-transparent my-5 w-[50%]">

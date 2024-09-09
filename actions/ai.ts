@@ -59,3 +59,30 @@ export async function saveQuery(
     };
   }
 }
+
+export async function getQueries(
+  email: string,
+  page: number,
+  pageSize: number
+) {
+  try {
+    await db();
+
+    const skip = (page - 1) * pageSize;
+    const totalQueries = await Query.countDocuments({ email });
+
+    const queries = await Query.find({ email })
+      .skip(skip)
+      .limit(pageSize)
+      .sort({ created: -1 });
+
+    return {
+      queries,
+      totalPages: Math.ceil(totalQueries / pageSize),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+    };
+  }
+}
