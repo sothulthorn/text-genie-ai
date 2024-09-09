@@ -46,14 +46,18 @@ export async function saveQuery(
   try {
     await db();
 
-    const newQuery = new Query({ template, email, query, content });
+    const newQuery = new Query({
+      template,
+      email,
+      query,
+      content,
+    });
 
     await newQuery.save();
-
     return {
       ok: true,
     };
-  } catch (error) {
+  } catch (err) {
     return {
       ok: false,
     };
@@ -74,13 +78,13 @@ export async function getQueries(
     const queries = await Query.find({ email })
       .skip(skip)
       .limit(pageSize)
-      .sort({ created: -1 });
+      .sort({ createdAt: -1 });
 
     return {
       queries,
       totalPages: Math.ceil(totalQueries / pageSize),
     };
-  } catch (error) {
+  } catch (err) {
     return {
       ok: false,
     };

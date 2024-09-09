@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { Toaster } from 'react-hot-toast';
+import Image from 'next/image';
 
 const TopNav = () => {
   const { isSignedIn, user } = useUser();
@@ -17,7 +18,16 @@ const TopNav = () => {
   return (
     <nav className="flex justify-between items-center p-2 shadow">
       <Toaster />
-      <Link href="/">TextGenie.AI</Link>
+      <Link href="/" className="flex justify-center items-center">
+        <Image
+          src="/document-ai.svg"
+          alt="Logo"
+          width={50}
+          height={50}
+          className="cursor-pointer"
+        />
+        <h2 className="text-[#4285f4] font-bold">TextGenie.AI</h2>
+      </Link>
       <div className="flex items-center">
         {isSignedIn && (
           <Link href="/dashboard" className="mr-2">
