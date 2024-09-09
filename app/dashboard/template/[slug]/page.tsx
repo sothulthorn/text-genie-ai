@@ -15,12 +15,14 @@ import toast from 'react-hot-toast';
 import { saveQuery } from '@/actions/ai';
 import { useUser } from '@clerk/nextjs';
 import { Template } from '@/utils/types';
+import { useUsage } from '@/context/usage';
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const [query, setQuery] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const { fetchUsage } = useUsage();
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress || '';
 
@@ -45,6 +47,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
 
       // Save to Database
       await saveQuery(t, email, query, data);
+      fetchUsage();
     } catch (error) {
       setContent('An error occurred, Please try again.');
     } finally {
