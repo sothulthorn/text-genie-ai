@@ -9,13 +9,12 @@ import { Textarea } from '@/components/ui/textarea';
 import template from '@/utils/template';
 import { useEffect, useRef, useState } from 'react';
 import { runAi } from '@/actions/ai';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/react-editor';
 import toast from 'react-hot-toast';
 import { saveQuery } from '@/actions/ai';
 import { useUser } from '@clerk/nextjs';
 import { Template } from '@/utils/types';
 import { useUsage } from '@/context/usage';
+import { Editor } from '@tinymce/tinymce-react';
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const [query, setQuery] = useState('');
@@ -29,9 +28,8 @@ const Page = ({ params }: { params: { slug: string } }) => {
   const editorRef = useRef<any>(null);
 
   useEffect(() => {
-    if (content) {
-      const editorInstance = editorRef.current.getInstance();
-      editorInstance.setMarkdown(content);
+    if (content && editorRef.current) {
+      editorRef.current.setContent(content);
     }
   }, [content]);
 
@@ -56,14 +54,14 @@ const Page = ({ params }: { params: { slug: string } }) => {
   };
 
   const handleCopy = async () => {
-    const editorInstance = editorRef.current.getInstance();
-    const content = editorInstance.getMarkdown();
-
-    try {
-      await navigator.clipboard.writeText(content);
-      toast.success('Content copied to clipboard');
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
+    if (editorRef.current) {
+      const content = editorRef.current.getContent();
+      try {
+        await navigator.clipboard.writeText(content);
+        toast.success('Content copied to clipboard');
+      } catch (error) {
+        toast.error('An error occurred. Please try again.');
+      }
     }
   };
 
@@ -123,14 +121,39 @@ const Page = ({ params }: { params: { slug: string } }) => {
 
         <div className="col-span-2">
           <Editor
-            ref={editorRef}
-            initialValue="Generated content will appear here."
-            previewStyle="vertical"
-            height="600px"
-            initialEditType="wysiwyg"
-            onChange={() =>
-              setContent(editorRef.current.getInstance().getMarkdown())
-            }
+            apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
+            onInit={(evt, editor) => {
+              // @ts-ignore
+              editorRef.current = editor;
+            }}
+            onEditorChange={(content) => setContent(content)}
+            init={{
+              height: 600,
+              menubar: false,
+              plugins: [
+                'advlist',
+                'autolink',
+                'lists',
+                'link',
+                'image',
+                'charmap',
+                'preview',
+                'anchor',
+                'searchreplace',
+                'visualblocks',
+                'codesample',
+                'fullscreen',
+                'insertdatetime',
+                'media',
+                'table',
+                'markdown',
+              ],
+              toolbar:
+                'undo redo | ' +
+                'codesample | bold italic forecolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist ',
+              content_style: 'body { font-family:Inter; font-size:16px }',
+            }}
           />
         </div>
       </div>
