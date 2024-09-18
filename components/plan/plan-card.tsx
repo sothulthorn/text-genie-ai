@@ -4,11 +4,35 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import toast from 'react-hot-toast';
 import { SignInButton, useUser } from '@clerk/nextjs';
+import { createCheckoutSession } from '@/actions/stripe';
+import { useRouter } from 'next/navigation';
 
 const PlanCard = ({ name, image }: { name: string; image: string }) => {
   const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
 
-  const handleCheckout = async () => {};
+  const handleCheckout = async () => {
+    if (name === 'Free') {
+      router.push('/dashboard');
+      return;
+    } else {
+      try {
+        const response = await createCheckoutSession();
+        const { url, error } = response;
+
+        if (error) {
+          toast.error(error);
+          return;
+        }
+
+        if (url) {
+          window.location.href = url;
+        }
+      } catch (error) {
+        toast.error('An unexpected error occurred. Please try again later.');
+      }
+    }
+  };
 
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 border">
