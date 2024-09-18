@@ -28,6 +28,9 @@ const TopNav = () => {
         />
         <h2 className="text-[#4285f4] font-bold">TextGenie.AI</h2>
       </Link>
+
+      <Link href="/membership">🔥 Join free or $9.99/month</Link>
+
       <div className="flex items-center">
         {isSignedIn && (
           <Link href="/dashboard" className="mr-2">
