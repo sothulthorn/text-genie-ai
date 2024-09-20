@@ -7,7 +7,7 @@ const TransactionSchema = new Schema(
     sessionId: String,
     customerId: String,
     invoiceId: String,
-    subscriptionID: String,
+    subscriptionId: String,
     mode: String,
     paymentStatus: String,
     customerEmail: String,

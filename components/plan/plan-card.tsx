@@ -6,8 +6,11 @@ import toast from 'react-hot-toast';
 import { SignInButton, useUser } from '@clerk/nextjs';
 import { createCheckoutSession } from '@/actions/stripe';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Loader2Icon } from 'lucide-react';
 
 const PlanCard = ({ name, image }: { name: string; image: string }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
@@ -16,6 +19,8 @@ const PlanCard = ({ name, image }: { name: string; image: string }) => {
       router.push('/dashboard');
       return;
     } else {
+      setIsLoading(true);
+
       try {
         const response = await createCheckoutSession();
         const { url, error } = response;
@@ -30,6 +35,8 @@ const PlanCard = ({ name, image }: { name: string; image: string }) => {
         }
       } catch (error) {
         toast.error('An unexpected error occurred. Please try again later.');
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -61,7 +68,13 @@ const PlanCard = ({ name, image }: { name: string; image: string }) => {
         </ul>
       </div>
 
-      {!isLoaded ? (
+      {isLoading ? (
+        <div className="px-5 pb-10">
+          <Button disabled={isLoading}>
+            <Loader2Icon className="animate-spin mr-2" /> Processing
+          </Button>
+        </div>
+      ) : !isLoaded ? (
         ''
       ) : !isSignedIn ? (
         <div className="px-5 pb-10">

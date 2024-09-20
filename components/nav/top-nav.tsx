@@ -11,9 +11,11 @@ import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { Toaster } from 'react-hot-toast';
 import Image from 'next/image';
+import { useUsage } from '@/context/usage';
 
 const TopNav = () => {
   const { isSignedIn, user } = useUser();
+  const { subscribed } = useUsage();
 
   return (
     <nav className="flex justify-between items-center p-2 shadow">
@@ -29,7 +31,9 @@ const TopNav = () => {
         <h2 className="text-[#4285f4] font-bold">TextGenie.AI</h2>
       </Link>
 
-      <Link href="/membership">🔥 Join free or $9.99/month</Link>
+      {!subscribed && (
+        <Link href="/membership">🔥 Join free or $9.99/month</Link>
+      )}
 
       <div className="flex items-center">
         {isSignedIn && (

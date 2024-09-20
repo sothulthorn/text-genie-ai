@@ -21,7 +21,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { fetchUsage } = useUsage();
+  const { fetchUsage, subscribed, count } = useUsage();
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress || '';
 
@@ -109,12 +109,20 @@ const Page = ({ params }: { params: { slug: string } }) => {
               </div>
             ))}
 
-            <Button type="submit" className="w-full py-6" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2Icon className="animate-spin mr-2" />
-              ) : (
-                'Generate Content'
-              )}
+            <Button
+              type="submit"
+              className="w-full py-6"
+              disabled={
+                isLoading ||
+                (!subscribed &&
+                  count >= Number(process.env.NEXT_PUBLIC_FREE_TIER_USAGE))
+              }
+            >
+              {isLoading && <Loader2Icon className="animate-spin mr-2" />}
+              {subscribed ||
+              count < Number(process.env.NEXT_PUBLIC_FREE_TIER_USAGE)
+                ? 'Generate Content'
+                : 'Subscribe to generate content'}
             </Button>
           </form>
         </div>

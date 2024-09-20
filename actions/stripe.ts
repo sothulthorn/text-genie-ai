@@ -56,3 +56,30 @@ export async function createCheckoutSession(): Promise<CheckoutSessionResponse> 
     return { error: 'Error creating stripe checkout session.' };
   }
 }
+
+export async function checkUserSubscription() {
+  const user = await currentUser();
+  const customerEmail = user?.emailAddresses[0]?.emailAddress;
+
+  try {
+    const transaction = await Transaction.findOne({
+      customerEmail,
+      status: 'complete',
+    });
+
+    if (transaction && transaction.subscriptionId) {
+      const subscription = await stripe.subscriptions.retrieve(
+        transaction.subscriptionId
+      );
+
+      if (subscription.status === 'active') {
+        return { ok: true };
+      } else {
+        return { ok: false };
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    return { message: 'Error checking subscription' };
+  }
+}
