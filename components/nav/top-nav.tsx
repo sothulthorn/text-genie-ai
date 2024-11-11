@@ -35,7 +35,7 @@ const TopNav = () => {
         <Link href="/membership">🔥 Join free or $9.99/month</Link>
       )}
 
-      <Link href="/gen-ai">Gen AI</Link>
+      {/* <Link href="/gen-ai">Genie.AI</Link> */}
 
       <div className="flex items-center">
         {isSignedIn && (
